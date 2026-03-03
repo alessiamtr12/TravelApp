@@ -16,6 +16,7 @@ import java.util.UUID;
 public class TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
+    private final GeocodingService geocodingService;
 
     public Trip addTrip(TripCreateDTO tripCreateDTO) {
         User user = userRepository.findById(tripCreateDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -24,6 +25,9 @@ public class TripService {
         trip.setDestination(tripCreateDTO.getDestination());
         trip.setStartDate(tripCreateDTO.getStartDate());
         trip.setEndDate(tripCreateDTO.getEndDate());
+        double[] coords = geocodingService.getCoordinates(tripCreateDTO.getDestination());
+        trip.setLatitude(coords[0]);
+        trip.setLongitude(coords[1]);
         return tripRepository.save(trip);
     }
 

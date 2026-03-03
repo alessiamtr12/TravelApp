@@ -28,4 +28,7 @@ public class Trip {
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties("trips")
     private User user;
+
+    private Double latitude;
+    private Double longitude;
 }
