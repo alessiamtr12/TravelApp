@@ -1,6 +1,7 @@
 package org.example.travelapp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.travelapp.model.HotelDTO;
 import org.example.travelapp.model.Trip;
 import org.example.travelapp.model.TripCreateDTO;
 import org.example.travelapp.model.User;
@@ -8,6 +9,7 @@ import org.example.travelapp.repository.TripRepository;
 import org.example.travelapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ public class TripService {
     private final TripRepository tripRepository;
     private final UserRepository userRepository;
     private final GeocodingService geocodingService;
+    private final DiscoveryService discoveryService;
 
     public Trip addTrip(TripCreateDTO tripCreateDTO) {
         User user = userRepository.findById(tripCreateDTO.getUserId()).orElseThrow(() -> new RuntimeException("User not found"));
@@ -34,5 +37,9 @@ public class TripService {
     public List<Trip> getTripsByUserId(UUID userId) {
         return tripRepository.findByUserId(userId);
 
+    }
+    public List<HotelDTO> getHotelsForTrip(UUID tripId){
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new RuntimeException("Trip not found"));
+        return discoveryService.findNearbyHotels(trip.getLatitude(), trip.getLongitude());
     }
 }
