@@ -1,15 +1,14 @@
 package org.example.travelapp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.travelapp.model.HotelDTO;
+import org.example.travelapp.dto.HotelDTO;
 import org.example.travelapp.model.Trip;
-import org.example.travelapp.model.TripCreateDTO;
+import org.example.travelapp.dto.TripCreateDTO;
 import org.example.travelapp.model.User;
 import org.example.travelapp.repository.TripRepository;
 import org.example.travelapp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 

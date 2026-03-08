@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TripService } from '../../services/trip';
 import { Trip } from '../../models/trip';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-trip-list',
@@ -10,21 +11,28 @@ import { Trip } from '../../models/trip';
 })
 export class TripListComponent implements OnInit {
   trips: any[] = [];
-  userId = '8c48eacd-a860-4903-b900-71c5ff94aebf';
 
   constructor(
     private tripService: TripService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.tripService.getTripsByUserId(this.userId).subscribe({
-      next: (data) => {
-        console.log('--- DATA ARRIVED ---', data);
-        this.trips = data;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Connection failed', err)
-    });
+    const userJson = localStorage.getItem('currentUser');
+
+    if(userJson){
+      const user = JSON.parse(userJson);
+      const loggedUserId = user.id;
+      this.tripService.getTripsByUserId(loggedUserId).subscribe({
+        next: (data) => {
+          this.trips = data;
+          this.cdr.detectChanges();
+        },
+        error: (err) => console.error(err)
+      });
+    } else{
+      this.router.navigate(['/login']);
+    }
   }
 }

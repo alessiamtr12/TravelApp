@@ -1,6 +1,6 @@
 package org.example.travelapp.service;
 
-import org.example.travelapp.model.HotelDTO;
+import org.example.travelapp.dto.HotelDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

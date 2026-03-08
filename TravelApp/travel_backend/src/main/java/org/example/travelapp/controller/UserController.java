@@ -2,9 +2,8 @@ package org.example.travelapp.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.example.travelapp.model.User;
-import org.example.travelapp.model.UserCreateDTO;
+import org.example.travelapp.dto.UserCreateDTO;
 import org.example.travelapp.service.UserService;
 import org.springframework.web.bind.annotation.*;
 

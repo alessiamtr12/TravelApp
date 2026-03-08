@@ -1,7 +1,7 @@
 package org.example.travelapp.service;
 
 import org.example.travelapp.model.User;
-import org.example.travelapp.model.UserCreateDTO;
+import org.example.travelapp.dto.UserCreateDTO;
 import org.example.travelapp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,13 +1,12 @@
 package org.example.travelapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.travelapp.model.HotelDTO;
+import org.example.travelapp.dto.HotelDTO;
 import org.example.travelapp.model.Trip;
-import org.example.travelapp.model.TripCreateDTO;
+import org.example.travelapp.dto.TripCreateDTO;
 import org.example.travelapp.service.TripService;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.UUID;
 
