@@ -35,4 +35,34 @@ export class TripListComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
+  newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' } };
+
+  saveTrip() {
+    const userJson = localStorage.getItem('currentUser');
+    if (userJson) {
+      const user = JSON.parse(userJson);
+
+      const tripDto = {
+        destination: this.newTrip.destination,
+        startDate: this.newTrip.startDate,
+        endDate: this.newTrip.endDate,
+        userId: user.id
+      };
+
+      console.log('Final DTO being sent:', tripDto);
+
+      this.tripService.addTrip(tripDto).subscribe({
+        next: (savedTrip) => {
+          console.log('Trip saved successfully!', savedTrip);
+          this.trips.push(savedTrip);
+          // Reset the form
+          this.newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' } };
+          this.cdr.detectChanges();
+        },
+        error: (err) => {
+          console.error('Backend still rejected it. Check the DTO field names!', err);
+        }
+      });
+    }
+  }
 }

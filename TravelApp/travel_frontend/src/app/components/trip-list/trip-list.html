@@ -1,15 +1,24 @@
 <div class="container">
   <h2>My Travel Destinations</h2>
 
+  <div class="add-trip-form" style="border: 2px solid #007bff; padding: 15px; margin-bottom: 20px;">
+    <h3>Add New Trip</h3>
+    <input [(ngModel)]="newTrip.destination" placeholder="Destination">
+    <input [(ngModel)]="newTrip.startDate" type="date">
+    <input [(ngModel)]="newTrip.endDate" type="date">
+    <button (click)="saveTrip()">Save Trip</button>
+  </div>
+
+  <hr>
+
   <div *ngIf="trips && trips.length > 0; else noData">
     <div *ngFor="let trip of trips" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
       <h3>Destination: {{ trip.destination }}</h3>
-      <p><strong>Traveler:</strong> {{ trip.user?.name }}</p>
       <p><strong>Dates:</strong> {{ trip.startDate }} - {{ trip.endDate }}</p>
     </div>
   </div>
 
   <ng-template #noData>
-    <p>No trips found in the array. Current count: {{ trips.length }}</p>
+    <p>No trips found. Current count: {{ trips.length }}</p>
   </ng-template>
 </div>

@@ -11,8 +11,10 @@ export class TripService {
 
   constructor(private http: HttpClient) { }
 
-  // Matches your @GetMapping("/trips/user/{userId}")
   getTripsByUserId(userId: string): Observable<Trip[]> {
     return this.http.get<Trip[]>(`${this.baseUrl}/trips/user/${userId}`);
+  }
+  addTrip(trip: any): Observable<any> {
+    return this.http.post('http://localhost:8080/trips', trip);
   }
 }
