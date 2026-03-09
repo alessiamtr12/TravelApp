@@ -5,6 +5,9 @@ export interface Trip {
   endDate: string;
   latitude: number;
   longitude: number;
+  hotelName?: string;
+  hotelLatitude?: number;
+  hotelLongitude?: number;
   user: {
     id: string;
     name: string;

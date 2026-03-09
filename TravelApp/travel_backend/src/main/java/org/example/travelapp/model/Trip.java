@@ -31,4 +31,8 @@ public class Trip {
 
     private Double latitude;
     private Double longitude;
+
+    private String hotelName;
+    private Double hotelLatitude;
+    private Double hotelLongitude;
 }

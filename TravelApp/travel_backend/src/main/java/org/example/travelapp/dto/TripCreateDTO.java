@@ -10,4 +10,7 @@ public class TripCreateDTO {
     private String startDate;
     private String endDate;
     private UUID userId;
+    private String hotelName;
+    private Double hotelLatitude;
+    private Double hotelLongitude;
 }

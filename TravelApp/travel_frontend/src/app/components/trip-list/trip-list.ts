@@ -19,6 +19,8 @@ export class TripListComponent implements OnInit {
     private router: Router
   ) {}
   map!: L.Map;
+  nearbyHotels: any[] = [];
+  selectedHotel: any = null;
   ngOnInit(): void {
     this.initMap();
     const userJson = localStorage.getItem('currentUser');
@@ -37,7 +39,7 @@ export class TripListComponent implements OnInit {
       this.router.navigate(['/login']);
     }
   }
-  newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' } };
+  newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' }, hotelName: '', hotelLatitude: null as number | null,  hotelLongitude: null as number | null};
 
   saveTrip() {
     const userJson = localStorage.getItem('currentUser');
@@ -48,7 +50,10 @@ export class TripListComponent implements OnInit {
         destination: this.newTrip.destination,
         startDate: this.newTrip.startDate,
         endDate: this.newTrip.endDate,
-        userId: user.id
+        userId: user.id,
+        hotelName: this.selectedHotel?.name,
+        hotelLat: this.selectedHotel?.latitude,
+        hotelLon: this.selectedHotel?.longitude
       };
 
       console.log('Final DTO being sent:', tripDto);
@@ -57,7 +62,8 @@ export class TripListComponent implements OnInit {
         next: (savedTrip) => {
           console.log('Trip saved successfully!', savedTrip);
           this.trips.push(savedTrip);
-          this.newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' } };
+          this.newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' }, hotelName: '',  hotelLatitude: null as number | null,  hotelLongitude: null as number | null};
+          this.nearbyHotels = [];
           this.cdr.detectChanges();
         },
         error: (err) => {
@@ -75,12 +81,24 @@ export class TripListComponent implements OnInit {
 
     this.map.on('click', (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
-      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-        .then(response => response.json())
+      const overpassUrl = `https://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="hotel"](around:5000,${lat},${lng});out;`;
+
+      fetch(overpassUrl)
+        .then(res => res.json())
         .then(data => {
-          this.newTrip.destination = data.address.city || data.address.town || data.address.country;
+          this.nearbyHotels = data.elements.map((h: any) => ({
+            name: h.tags.name || "Unnamed Hotel",
+            latitude: h.lat,
+            longitude: h.lon,
+            address: h.tags['addr:street'] || "Address unknown"
+          }));
           this.cdr.detectChanges();
         });
     });
+  }
+  selectHotel(hotel: any) {
+    this.selectedHotel = hotel;
+    this.newTrip.destination = hotel.name + ", " + hotel.address;
+    this.cdr.detectChanges();
   }
 }

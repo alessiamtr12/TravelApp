@@ -30,6 +30,11 @@ public class TripService {
         double[] coords = geocodingService.getCoordinates(tripCreateDTO.getDestination());
         trip.setLatitude(coords[0]);
         trip.setLongitude(coords[1]);
+        if (tripCreateDTO.getHotelName() != null) {
+            trip.setHotelName(tripCreateDTO.getHotelName());
+            trip.setHotelLatitude(tripCreateDTO.getHotelLatitude());
+            trip.setHotelLongitude(tripCreateDTO.getHotelLongitude());
+        }
         return tripRepository.save(trip);
     }
 

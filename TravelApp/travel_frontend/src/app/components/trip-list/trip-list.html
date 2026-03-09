@@ -11,19 +11,36 @@
       <input [(ngModel)]="newTrip.destination" placeholder="Where to?">
       <input [(ngModel)]="newTrip.startDate" type="date">
       <input [(ngModel)]="newTrip.endDate" type="date">
-      <button class="btn-save" (click)="saveTrip()">Book Trip</button>
     </div>
-  </div>
+
+    <div *ngIf="nearbyHotels.length > 0" class="hotel-results" style="margin-top: 15px;">
+      <h4>Select a Hotel nearby:</h4>
+      <div class="hotel-list" style="max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 8px; padding: 5px; background: #fff;">
+        <div *ngFor="let hotel of nearbyHotels"
+             (click)="selectHotel(hotel)"
+             [style.background]="selectedHotel?.name === hotel.name ? '#d4edda' : 'white'"
+             style="cursor: pointer; padding: 8px; border-bottom: 1px solid #eee;">
+          <strong>{{ hotel.name }}</strong> <br>
+          <small>{{ hotel.address }}</small>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn-save" style="margin-top: 15px;" (click)="saveTrip()" [disabled]="!selectedHotel">
+      Book Trip at {{ selectedHotel?.name || '...' }}
+    </button>
+  </div> <hr>
 
   <div class="trips-grid" *ngIf="trips.length > 0; else noData">
     <div *ngFor="let trip of trips" class="trip-card">
       <div class="card-header">
-        <h3> {{ trip.destination }}</h3>
+        <h3>{{ trip.destination }}</h3>
       </div>
       <div class="card-body">
-        <p> <strong>From:</strong> {{ trip.startDate }}</p>
-        <p> <strong>To:</strong> {{ trip.endDate }}</p>
-        <p> <strong>Traveler:</strong> {{ trip.user?.name }}</p>
+        <p *ngIf="trip.hotelName" style="color: #27ae60;"><strong>Hotel:</strong> {{ trip.hotelName }}</p>
+        <p><strong>From:</strong> {{ trip.startDate }}</p>
+        <p><strong>To:</strong> {{ trip.endDate }}</p>
+        <p><strong>Traveler:</strong> {{ trip.user?.name }}</p>
       </div>
     </div>
   </div>
