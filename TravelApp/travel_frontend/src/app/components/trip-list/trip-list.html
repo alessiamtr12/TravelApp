@@ -1,24 +1,36 @@
 <div class="container">
-  <h2>My Travel Destinations</h2>
-
-  <div class="add-trip-form" style="border: 2px solid #007bff; padding: 15px; margin-bottom: 20px;">
-    <h3>Add New Trip</h3>
-    <input [(ngModel)]="newTrip.destination" placeholder="Destination">
-    <input [(ngModel)]="newTrip.startDate" type="date">
-    <input [(ngModel)]="newTrip.endDate" type="date">
-    <button (click)="saveTrip()">Save Trip</button>
+  <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+    <h2>My Travel Journeys</h2>
   </div>
 
-  <hr>
+  <div class="add-trip-form">
+    <h3>Plan a New Adventure</h3>
+    <div id="map" style="height: 250px; margin-bottom: 15px; border-radius: 10px; border: 2px solid #2ecc71;"></div>
 
-  <div *ngIf="trips && trips.length > 0; else noData">
-    <div *ngFor="let trip of trips" style="border: 1px solid #ccc; margin: 10px; padding: 10px;">
-      <h3>Destination: {{ trip.destination }}</h3>
-      <p><strong>Dates:</strong> {{ trip.startDate }} - {{ trip.endDate }}</p>
+    <div class="input-group">
+      <input [(ngModel)]="newTrip.destination" placeholder="Where to?">
+      <input [(ngModel)]="newTrip.startDate" type="date">
+      <input [(ngModel)]="newTrip.endDate" type="date">
+      <button class="btn-save" (click)="saveTrip()">Book Trip</button>
+    </div>
+  </div>
+
+  <div class="trips-grid" *ngIf="trips.length > 0; else noData">
+    <div *ngFor="let trip of trips" class="trip-card">
+      <div class="card-header">
+        <h3> {{ trip.destination }}</h3>
+      </div>
+      <div class="card-body">
+        <p> <strong>From:</strong> {{ trip.startDate }}</p>
+        <p> <strong>To:</strong> {{ trip.endDate }}</p>
+        <p> <strong>Traveler:</strong> {{ trip.user?.name }}</p>
+      </div>
     </div>
   </div>
 
   <ng-template #noData>
-    <p>No trips found. Current count: {{ trips.length }}</p>
+    <div style="text-align: center; padding: 50px; color: #95a5a6;">
+      <p>Your passport is empty! Start by booking a trip above.</p>
+    </div>
   </ng-template>
 </div>

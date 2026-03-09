@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TripService } from '../../services/trip';
 import { Trip } from '../../models/trip';
 import { Router } from '@angular/router';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-trip-list',
@@ -17,8 +18,9 @@ export class TripListComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
-
+  map!: L.Map;
   ngOnInit(): void {
+    this.initMap();
     const userJson = localStorage.getItem('currentUser');
 
     if(userJson){
@@ -55,7 +57,6 @@ export class TripListComponent implements OnInit {
         next: (savedTrip) => {
           console.log('Trip saved successfully!', savedTrip);
           this.trips.push(savedTrip);
-          // Reset the form
           this.newTrip = { destination: '', startDate: '', endDate: '', user: { id: '' } };
           this.cdr.detectChanges();
         },
@@ -64,5 +65,22 @@ export class TripListComponent implements OnInit {
         }
       });
     }
+  }
+  private initMap(): void {
+    this.map = L.map('map').setView([45.9432, 24.9668], 5); // centers on Europe
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+
+    this.map.on('click', (e: L.LeafletMouseEvent) => {
+      const { lat, lng } = e.latlng;
+      fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+        .then(response => response.json())
+        .then(data => {
+          this.newTrip.destination = data.address.city || data.address.town || data.address.country;
+          this.cdr.detectChanges();
+        });
+    });
   }
 }
